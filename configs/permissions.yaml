@@ -1,0 +1,53 @@
+version: "1.0"
+
+policies:
+  filesystem:
+    allowed_roots:
+      - "data/workspaces"
+      - "data/learning"
+      - "data/memory"
+      - "configs"
+    denied_paths:
+      - "/etc"
+      - "/var"
+      - "/System"
+      - "/Library"
+      - "~/.ssh"
+      - "~/.gnupg"
+      - "~/.aws"
+      - ".env"
+    default_policy: "ASK"
+
+  terminal:
+    auto_allowed_commands:
+      - "ls"
+      - "cat"
+      - "head"
+      - "tail"
+      - "grep"
+      - "find"
+      - "echo"
+      - "pwd"
+      - "python3"
+      - "pytest"
+      - "git"
+      - "uname"
+      - "sysctl"
+      - "df"
+      - "which"
+    denied_patterns:
+      - "rm -rf /"
+      - "mkfs"
+      - "dd if="
+      - ":(){ :|:& };:"
+      - "chmod -R 777 /"
+      - "curl * | sh"
+      - "wget * | sh"
+      - "sudo *"
+    default_policy: "ALLOW_SANDBOXED"
+
+  network:
+    allow_outbound_http: true
+    allow_local_binding: true
+    denied_hosts:
+      - "169.254.169.254" # Cloud metadata endpoint

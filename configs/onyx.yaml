@@ -1,0 +1,82 @@
+system:
+  name: "ONYX"
+  version: "0.1.0"
+  identity:
+    role: "Autonomous Personal AI Intelligence System"
+    owner: "Lakshit Singhvi"
+    built_by: "ISIRA Automations"
+    operating_principles:
+      - "Operate with persistent memory and factual integrity."
+      - "Prioritize local, private, and deterministic execution."
+      - "Refuse fabricated capabilities, data, or verification states."
+      - "Perform sandboxed tool operations with explicit permission controls."
+      - "Continuously learn, evaluate, and safely improve workflows."
+
+server:
+  host: "127.0.0.1"
+  port: 8080
+  debug: false
+  require_auth: false
+  api_prefix: "/api/v1"
+
+memory:
+  backend: "sqlite" # sqlite | postgres
+  sqlite_path: "data/memory/onyx_memory.db"
+  pg_url: "postgresql://onyx:onyx@localhost:5432/onyx_memory"
+  vector_dimension: 384
+  embedding_model: "fast-embed-local"
+  ttl_cleanup_minutes: 60
+  obsidian_vault_path: "data/obsidian_vault"
+
+models:
+  default_backend: "auto" # auto | ollama | llamacpp | transformers | mock
+  fallback_order:
+    - "ollama"
+    - "llamacpp"
+    - "transformers"
+    - "mock"
+  ollama:
+    base_url: "http://localhost:11434"
+    default_model: "llama3.2:latest"
+    timeout_seconds: 120
+  transformers:
+    device: "auto" # auto | mps | cuda | cpu
+    quantization: "4bit"
+  context_window: 8192
+  temperature: 0.7
+
+agents:
+  supervisor:
+    model: "default"
+    max_steps: 15
+    timeout_seconds: 180
+  specialists:
+    - research
+    - architect
+    - developer
+    - data
+    - model
+    - memory
+    - evaluation
+    - security
+
+execution:
+  sandbox_root: "data/workspaces"
+  command_timeout_seconds: 60
+  max_output_bytes: 1048576 # 1 MB
+  allow_network: true
+
+learning:
+  datasets_dir: "data/learning/datasets"
+  checkpoints_dir: "data/learning/checkpoints"
+  experiments_dir: "data/learning/experiments"
+  max_training_epochs: 3
+  batch_size: 2
+
+sync:
+  node_id: "onyx-node-primary"
+  bundle_dir: "data/sync"
+  allowed_categories:
+    - "skills"
+    - "identity"
+    - "long_term_knowledge"

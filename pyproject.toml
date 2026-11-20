@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "onyx-ai"
+version = "0.1.0"
+description = "ONYX — Portable, Self-Improving Personal AI Intelligence System"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [
+    { name = "ONYX Project Team" }
+]
+dependencies = [
+    "fastapi>=0.110.0",
+    "uvicorn[standard]>=0.28.0",
+    "pydantic>=2.6.0",
+    "pyyaml>=6.0.1",
+    "httpx>=0.27.0",
+    "aiofiles>=23.2.1",
+    "rich>=13.7.0",
+    
+    "click>=8.1.7",
+    "numpy>=1.26.0",
+    "pypdf>=4.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+]
+postgres = [
+    "asyncpg>=0.29.0",
+]
+ml = [
+    "torch>=2.0.0",
+    "transformers>=4.40.0",
+    "peft>=0.10.0",
+]
+
+[project.scripts]
+onyx = "onyx.cli.main:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["onyx*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]

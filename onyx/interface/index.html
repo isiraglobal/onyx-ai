@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ONYX — Portable Personal AI</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="logo-gem"></div>
+                <h2>ONYX</h2>
+                <span class="version-tag">v0.1.0</span>
+            </div>
+
+            <nav class="nav-links">
+                <button class="nav-item active" data-tab="chat">💬 Chat & Agents</button>
+                <button class="nav-item" data-tab="memory">🧠 Personal Memory</button>
+                <button class="nav-item" data-tab="learning">🧪 Learning Lab</button>
+                <button class="nav-item" data-tab="models">⚡ Model Engine</button>
+                <button class="nav-item" data-tab="improvement">📈 Self-Improvement</button>
+                <button class="nav-item" data-tab="sync">🔄 Sync & Backups</button>
+            </nav>
+
+            <div class="system-status-card">
+                <h4>System Health</h4>
+                <div class="status-row">
+                    <span>Engine:</span> <strong id="lbl-model">Auto</strong>
+                </div>
+                <div class="status-row">
+                    <span>Memory:</span> <strong id="lbl-records">0 records</strong>
+                </div>
+                <div class="status-row">
+                    <span>Hardware:</span> <strong id="lbl-hw">Detecting...</strong>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- TAB: CHAT -->
+            <section id="tab-chat" class="tab-pane active">
+                <header class="content-header">
+                    <h3>Interactive Intelligence Console</h3>
+                    <span class="badge">Supervisor + 8 Specialists Active</span>
+                </header>
+                <div class="chat-log" id="chat-log">
+                    <div class="message assistant">
+                        <strong>ONYX:</strong> Greetings, Lakshit. Personal memory and specialist agents are active. How can I assist you?
+                    </div>
+                </div>
+                <div class="chat-input-bar">
+                    <input type="text" id="chat-input" placeholder="Give ONYX a task, research topic, or development goal..." autocomplete="off">
+                    <button id="btn-send">Send</button>
+                </div>
+            </section>
+
+            <!-- TAB: MEMORY -->
+            <section id="tab-memory" class="tab-pane">
+                <header class="content-header">
+                    <h3>Personal Memory Explorer</h3>
+                    <div>
+                        <button id="btn-refresh-memory" class="btn-secondary">Refresh</button>
+                    </div>
+                </header>
+                <div class="memory-controls">
+                    <input type="text" id="mem-search" placeholder="Semantic search across memory records...">
+                    <select id="mem-cat-select">
+                        <option value="">All Categories</option>
+                        <option value="identity">Identity & Principles</option>
+                        <option value="knowledge">Knowledge</option>
+                        <option value="skills">Skills & Tools</option>
+                        <option value="episodic">Episodic History</option>
+                        <option value="projects">Projects</option>
+                    </select>
+                </div>
+                <div class="memory-grid" id="memory-grid">
+                    <!-- Populated dynamically -->
+                </div>
+            </section>
+
+            <!-- TAB: LEARNING LAB -->
+            <section id="tab-learning" class="tab-pane">
+                <header class="content-header">
+                    <h3>Learning Lab & Ingestion</h3>
+                </header>
+                <div class="card">
+                    <h4>Ingest Knowledge Document</h4>
+                    <p>Supply text, PDFs, or source code to extract facts and create training pairs.</p>
+                    <div class="form-row">
+                        <input type="text" id="ingest-path" placeholder="Absolute or relative file path (/path/to/doc.pdf)...">
+                        <button id="btn-ingest" class="btn-primary">Ingest Document</button>
+                    </div>
+                    <div id="ingest-status" class="status-msg"></div>
+                </div>
+            </section>
+
+            <!-- TAB: MODELS -->
+            <section id="tab-models" class="tab-pane">
+                <header class="content-header">
+                    <h3>Hardware-Aware Model Engine</h3>
+                    <button id="btn-benchmark" class="btn-secondary">Run Benchmark</button>
+                </header>
+                <div class="card" id="hw-details-card">
+                    <h4>Hardware Diagnostics</h4>
+                    <pre id="hw-raw">Loading hardware specs...</pre>
+                </div>
+                <div class="card">
+                    <h4>Registered Inference Backends</h4>
+                    <div id="models-list"></div>
+                </div>
+            </section>
+
+            <!-- TAB: SELF IMPROVEMENT -->
+            <section id="tab-improvement" class="tab-pane">
+                <header class="content-header">
+                    <h3>Continuous Self-Improvement Loop</h3>
+                </header>
+                <div class="card">
+                    <h4>Verified Promotions & Safety Guardrails</h4>
+                    <p>All automatic improvements must pass quantitative benchmark tests before promotion.</p>
+                    <div id="promotions-list">No recent promotions recorded. System operating at baseline.</div>
+                </div>
+            </section>
+
+            <!-- TAB: SYNC -->
+            <section id="tab-sync" class="tab-pane">
+                <header class="content-header">
+                    <h3>Portability & Node Synchronization</h3>
+                </header>
+                <div class="card">
+                    <h4>Export Sync Bundle (.onyx)</h4>
+                    <p>Package approved personal memories, skills, and configurations with cryptographic signing.</p>
+                    <button id="btn-export-bundle" class="btn-primary">Export New Sync Bundle</button>
+                    <div id="sync-export-result" class="status-msg"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

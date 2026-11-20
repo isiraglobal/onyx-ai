@@ -1,0 +1,66 @@
+version: "3.8"
+
+services:
+  onyx-core:
+    build:
+      context: ..
+      dockerfile: deployments/Dockerfile
+    container_name: onyx-core
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - ONYX_ENV=production
+      - ONYX_HOST=0.0.0.0
+      - ONYX_PORT=8080
+      - ONYX_MEMORY_BACKEND=postgres
+      - ONYX_PG_URL=postgresql://onyx:onyx_production_pass@onyx-db:5432/onyx_memory
+      - ONYX_OLLAMA_BASE_URL=http://ollama:11434
+      - ONYX_SECRET_KEY=generate-a-secure-key-for-prod
+    volumes:
+      - onyx-data:/app/data
+      - onyx-configs:/app/configs
+    depends_on:
+      onyx-db:
+        condition: service_healthy
+    networks:
+      - onyx-network
+
+  onyx-db:
+    image: pgvector/pgvector:pg16
+    container_name: onyx-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=onyx
+      - POSTGRES_PASSWORD=onyx_production_pass
+      - POSTGRES_DB=onyx_memory
+    volumes:
+      - onyx-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U onyx -d onyx_memory"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - onyx-network
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: onyx-ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - onyx-ollama:/root/.ollama
+    networks:
+      - onyx-network
+
+volumes:
+  onyx-data:
+  onyx-configs:
+  onyx-pgdata:
+  onyx-ollama:
+
+networks:
+  onyx-network:
+    driver: bridge

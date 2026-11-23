@@ -21,6 +21,14 @@ from onyx.tools.code_exec import PythonExecTool
 from onyx.tools.git_tools import GitOperationsTool
 from onyx.tools.document import DocumentExtractTool
 from onyx.tools.scheduler import ScheduledTaskTool
+from onyx.tools.qla_tools import (
+    QLADealFlowTool,
+    QLAFinancialAnalysisTool,
+    QLADreamTeamTool,
+    QLAFinancingTool,
+    QLANegotiationTool,
+    QLAExecutionTool,
+)
 from onyx.execution.sandbox import WorkspaceSandbox
 from onyx.execution.permissions import PermissionManager
 from onyx.agents.pool import AgentPool
@@ -73,6 +81,12 @@ class OnyxCore:
         self.tools.register(GitOperationsTool(sandbox=self.sandbox))
         self.tools.register(DocumentExtractTool())
         self.tools.register(ScheduledTaskTool())
+        self.tools.register(QLADealFlowTool())
+        self.tools.register(QLAFinancialAnalysisTool())
+        self.tools.register(QLADreamTeamTool())
+        self.tools.register(QLAFinancingTool())
+        self.tools.register(QLANegotiationTool())
+        self.tools.register(QLAExecutionTool())
 
     async def initialize(self) -> None:
         """Bootstrap database schema, verify hardware, and initialize active model and agents."""

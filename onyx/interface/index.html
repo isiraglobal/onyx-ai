@@ -13,11 +13,12 @@
             <div class="brand">
                 <div class="logo-gem"></div>
                 <h2>ONYX</h2>
-                <span class="version-tag">v0.1.0</span>
+                <span class="version-tag">v0.2.0</span>
             </div>
 
             <nav class="nav-links">
                 <button class="nav-item active" data-tab="chat">💬 Chat & Agents</button>
+                <button class="nav-item" data-tab="qla">⚡ QLA Command Centre</button>
                 <button class="nav-item" data-tab="memory">🧠 Personal Memory</button>
                 <button class="nav-item" data-tab="learning">🧪 Learning Lab</button>
                 <button class="nav-item" data-tab="models">⚡ Model Engine</button>
@@ -49,12 +50,87 @@
                 </header>
                 <div class="chat-log" id="chat-log">
                     <div class="message assistant">
-                        <strong>ONYX:</strong> Greetings, Lakshit. Personal memory and specialist agents are active. How can I assist you?
+                        <strong>ONYX:</strong> Greetings. Personal memory and specialist agents are active. How can I assist you?
                     </div>
                 </div>
                 <div class="chat-input-bar">
                     <input type="text" id="chat-input" placeholder="Give ONYX a task, research topic, or development goal..." autocomplete="off">
                     <button id="btn-send">Send</button>
+                </div>
+            </section>
+
+            <!-- TAB: QLA COMMAND CENTRE -->
+            <section id="tab-qla" class="tab-pane">
+                <header class="content-header">
+                    <h3>Project JARVIS — QLA Deal-Making Command Centre</h3>
+                    <span class="badge" style="background: #10b981; color: #fff;">QLA Operating System Active</span>
+                </header>
+
+                <div class="qla-dashboard-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-top: 16px;">
+                    <!-- Card 1: Daily Briefing -->
+                    <div class="card" style="border-left: 4px solid #3b82f6;">
+                        <h4>🌅 Morning Command Briefing</h4>
+                        <div id="qla-briefing-content">
+                            <button id="btn-load-briefing" class="btn-primary" style="margin-bottom: 10px;">Load Morning Battle Orders</button>
+                            <div id="qla-briefing-text" style="font-size: 0.9em; white-space: pre-wrap; color: #e2e8f0;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Deal Pipeline -->
+                    <div class="card" style="border-left: 4px solid #10b981;">
+                        <h4>💼 Deal Flow Pipeline</h4>
+                        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                            <button id="btn-refresh-pipeline" class="btn-secondary">Refresh</button>
+                            <button id="btn-weakest-deal" class="btn-secondary" style="color: #f59e0b;">Find Weakest Deal</button>
+                        </div>
+                        <div id="qla-pipeline-stats" style="font-weight: bold; margin-bottom: 8px;">Loading pipeline...</div>
+                        <div id="qla-deals-list" style="max-height: 200px; overflow-y: auto; font-size: 0.85em;"></div>
+                    </div>
+
+                    <!-- Card 3: Dream Team Roster -->
+                    <div class="card" style="border-left: 4px solid #8b5cf6;">
+                        <h4>👥 Dream Team & Board Readiness</h4>
+                        <button id="btn-check-dream-team" class="btn-secondary" style="margin-bottom: 10px;">Audit Board Readiness</button>
+                        <div id="qla-dream-team-status" style="font-size: 0.9em;"></div>
+                        <div id="qla-candidates-list" style="max-height: 150px; overflow-y: auto; font-size: 0.85em; margin-top: 8px;"></div>
+                    </div>
+
+                    <!-- Card 4: Deterministic LBO & Valuation Calculator -->
+                    <div class="card" style="border-left: 4px solid #ec4899;">
+                        <h4>🧮 LBO & Debt Sizing Calculator</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                            <div>
+                                <label style="font-size: 0.8em;">Purchase Price ($):</label>
+                                <input type="number" id="calc-price" value="4000000" style="width: 100%;">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.8em;">Target EBITDA ($):</label>
+                                <input type="number" id="calc-ebitda" value="1000000" style="width: 100%;">
+                            </div>
+                        </div>
+                        <button id="btn-calc-lbo" class="btn-primary" style="margin-top: 10px; width: 100%;">Calculate LBO Structure</button>
+                        <div id="qla-lbo-output" style="margin-top: 10px; font-size: 0.85em; background: #1e293b; padding: 10px; border-radius: 6px; white-space: pre-wrap;"></div>
+                    </div>
+
+                    <!-- Card 5: Bogus Financial Books Verification -->
+                    <div class="card" style="border-left: 4px solid #ef4444;">
+                        <h4>🔍 Bogus Books & Fraud Audit</h4>
+                        <p style="font-size: 0.8em; color: #94a3b8;">Dan Peña forensic diligence checklist: verify tax returns vs P&L, customer concentration, and owner dependency.</p>
+                        <button id="btn-run-bogus-audit" class="btn-secondary" style="width: 100%;">Run Forensic Check</button>
+                        <div id="qla-bogus-output" style="margin-top: 10px; font-size: 0.85em; color: #f1f5f9;"></div>
+                    </div>
+
+                    <!-- Card 6: Quick JARVIS Directives -->
+                    <div class="card" style="border-left: 4px solid #f59e0b;">
+                        <h4>⚡ Quick JARVIS Directives</h4>
+                        <div style="display: flex; flex-direction: column; gap: 6px;">
+                            <button class="btn-directive btn-secondary" data-prompt="JARVIS, give me my morning briefing and top 5 priorities for today.">🌅 Morning Briefing</button>
+                            <button class="btn-directive btn-secondary" data-prompt="JARVIS, find the weakest deal in my pipeline and tell me why.">⚠️ Detect Weakest Deal</button>
+                            <button class="btn-directive btn-secondary" data-prompt="JARVIS, what is our Dream Team readiness score and what critical board seats are missing?">👥 Dream Team Audit</button>
+                            <button class="btn-directive btn-secondary" data-prompt="JARVIS, simulate a negotiation with a business owner demanding 100% all cash at closing.">🤝 Simulate Seller Pushback</button>
+                            <button class="btn-directive btn-secondary" data-prompt="JARVIS, what commitments have I failed to complete, and what is our next action on every active deal?">🎯 Critical Path Check</button>
+                        </div>
+                    </div>
                 </div>
             </section>
 

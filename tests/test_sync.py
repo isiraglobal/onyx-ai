@@ -32,7 +32,7 @@ async def test_bundle_export_and_import(sync_env):
 
     # Add records on Node 1
     rec1 = await mem1.remember("Skill: python -m venv .venv", MemoryCategory.SKILLS)
-    rec2 = await mem1.remember("Identity: Personal AI for Lakshit", MemoryCategory.IDENTITY)
+    rec2 = await mem1.remember("Identity: Personal AI for ISIRA Automations", MemoryCategory.IDENTITY)
 
     mgr1 = SyncBundleManager(node_id="node-1", bundle_dir=bundle_dir)
     bundle_path = await mgr1.export_bundle(mem1)

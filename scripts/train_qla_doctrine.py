@@ -118,7 +118,7 @@ def generate_sft_dataset() -> List[TrainingExample]:
         # 2. Who created you?
         (
             "Who created you and who owns you?",
-            "I was built by ISIRA Automations, and I am owned by Lakshit Singhvi.",
+            "I was built by ISIRA Automations.",
             "Context: System origin and ownership rule."
         ),
         # 3. Starting a Business / Garage Myth

@@ -20,13 +20,22 @@ class TaskRouter:
         p_lower = prompt.lower()
 
         # 0. Quantum Leap Advantage (QLA) Acquisitions & Deal Structuring
-        if any(w in p_lower for w in ["qla", "quantum leap", "bodacious goal", "seller finance", "leveraged buyout", "lbo", "dream team", "roll-up", "rollup", "acquisition vehicle", "fragmented industry", "trillion dollar man"]):
+        qla_deal_keywords = [
+            "qla", "quantum leap", "bodacious goal", "seller finance", "leveraged buyout", "lbo",
+            "dream team", "roll-up", "rollup", "acquisition vehicle", "fragmented industry",
+            "trillion dollar man", "deal flow", "pipeline", "acquisition target", "ebitda",
+            "valuation multiple", "dscr", "debt service", "bogus books", "due diligence",
+            "morning briefing", "evening review", "critical path", "letter of intent", "loi",
+            "board of directors", "financing memo", "commercial bank debt", "counterparty",
+            "buy a company", "buy a business", "acquire a business", "acquisitions",
+        ]
+        if any(w in p_lower for w in qla_deal_keywords):
             return RouteDecision(
                 task_category="qla_acquisitions",
                 target_agent="quantum_leap",
                 target_model_tier="standard",
-                needs_tools=False,
-                rationale="Direct Quantum Leap Advantage (QLA) guidance via QuantumLeapAgent.",
+                needs_tools=True,
+                rationale="Direct Quantum Leap Advantage (QLA) deal-making operating system via QuantumLeapAgent.",
             )
 
         # 1. Research queries & Real-world Knowledge Lookup

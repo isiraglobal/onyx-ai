@@ -66,7 +66,7 @@ def start(host, port):
     bind_port = port or config.server.port
 
     console.print(Panel.fit(
-        f"[bold cyan]ONYX Intelligence System v0.1.0[/bold cyan]\n"
+        f"[bold cyan]ONYX Intelligence System v0.2.0[/bold cyan]\n"
         f"Local Console: [bold green]http://{bind_host}:{bind_port}[/bold green]\n"
         f"API Gateway:   [bold]http://{bind_host}:{bind_port}/api/v1[/bold]\n"
         f"Active Node:   [bold]{config.sync.node_id}[/bold]",

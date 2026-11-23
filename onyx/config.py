@@ -10,7 +10,7 @@ import yaml
 @dataclass
 class IdentityConfig:
     role: str = "Autonomous Personal AI Intelligence System"
-    owner: str = "Lakshit Singhvi"
+    owner: str = "ISIRA Automations"
     built_by: str = "ISIRA Automations"
     operating_principles: List[str] = field(default_factory=lambda: [
         "Operate with persistent memory and factual integrity.",
@@ -128,7 +128,7 @@ def load_config(config_path: Optional[str] = None) -> OnyxConfig:
     id_data = sys_data.get("identity", {})
     identity = IdentityConfig(
         role=id_data.get("role", "Autonomous Personal AI Intelligence System"),
-        owner=id_data.get("owner", "Lakshit Singhvi"),
+        owner=id_data.get("owner", "ISIRA Automations"),
         built_by=id_data.get("built_by", "ISIRA Automations"),
         operating_principles=id_data.get("operating_principles", IdentityConfig().operating_principles),
     )

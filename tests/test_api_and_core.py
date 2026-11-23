@@ -155,3 +155,38 @@ async def test_fastapi_rest_endpoints(core_test_env):
         # Memory Delete
         del_resp = await client.delete(f"/api/v1/memory/{rec_id}")
         assert del_resp.status_code == 200
+
+        # QLA Pipeline & Briefing
+        qla_brief_resp = await client.get("/api/v1/qla/briefing")
+        assert qla_brief_resp.status_code == 200
+        assert "top_5_critical_actions_today" in qla_brief_resp.json()
+
+        qla_pipe_resp = await client.get("/api/v1/qla/pipeline")
+        assert qla_pipe_resp.status_code == 200
+        assert "summary" in qla_pipe_resp.json()
+
+        # QLA Add Deal
+        add_deal_resp = await client.post("/api/v1/qla/deals", json={
+            "company_name": "Precision Plumbing Corp",
+            "industry": "Commercial Plumbing",
+            "revenue": 4500000.0,
+            "ebitda": 900000.0,
+            "asking_price": 3600000.0,
+        })
+        assert add_deal_resp.status_code == 200
+        assert add_deal_resp.json()["deal"]["company_name"] == "Precision Plumbing Corp"
+
+        # QLA Financial Analysis (LBO model)
+        analyze_resp = await client.post("/api/v1/qla/analyze", json={
+            "mode": "lbo_model",
+            "purchase_price": 3600000.0,
+            "ebitda": 900000.0,
+            "seller_note_pct": 0.25,
+        })
+        assert analyze_resp.status_code == 200
+        assert analyze_resp.json()["results"]["base_dscr"] >= 1.25
+
+        # QLA Dream Team
+        dt_resp = await client.get("/api/v1/qla/dream-team")
+        assert dt_resp.status_code == 200
+        assert "readiness" in dt_resp.json()

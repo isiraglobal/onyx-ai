@@ -52,7 +52,7 @@ async def test_sqlite_memory_store_crud(temp_db_path):
 
     record = MemoryRecord(
         category=MemoryCategory.IDENTITY,
-        content="Name is ONYX, developed for owner Lakshit.",
+        content="Name is ONYX, developed by ISIRA Automations.",
         metadata={"priority": "high", "topic": "identity"},
         embedding=emb,
     )

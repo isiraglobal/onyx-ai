@@ -184,6 +184,173 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // --- QLA Deal-Making Dashboard Logic ---
+    const btnLoadBriefing = document.getElementById("btn-load-briefing");
+    if (btnLoadBriefing) {
+        btnLoadBriefing.addEventListener("click", async () => {
+            const out = document.getElementById("qla-briefing-text");
+            out.innerText = "Retrieving morning battle orders...";
+            try {
+                const res = await fetch("/api/v1/qla/briefing");
+                if (res.ok) {
+                    const data = await res.json();
+                    let text = `${data.greeting}\n\nTOP 5 CRITICAL ACTIONS:\n`;
+                    data.top_5_critical_actions_today.forEach(a => text += `• ${a}\n`);
+                    text += `\nMANDATE: ${data.core_mandate}`;
+                    out.innerText = text;
+                }
+            } catch (e) {
+                out.innerText = `Error loading briefing: ${e.message}`;
+            }
+        });
+    }
+
+    const btnRefreshPipeline = document.getElementById("btn-refresh-pipeline");
+    if (btnRefreshPipeline) {
+        const loadPipeline = async () => {
+            const stats = document.getElementById("qla-pipeline-stats");
+            const list = document.getElementById("qla-deals-list");
+            stats.innerText = "Loading pipeline...";
+            try {
+                const res = await fetch("/api/v1/qla/pipeline");
+                if (res.ok) {
+                    const data = await res.json();
+                    stats.innerText = `${data.summary.total_active_opportunities} Active Targets | Pipeline Value: $${(data.summary.total_pipeline_value || 0).toLocaleString()}`;
+                    list.innerHTML = "";
+                    if (!data.deals || data.deals.length === 0) {
+                        list.innerHTML = "<p style='color:#64748b'>No deals added yet. Add via chat or API.</p>";
+                    } else {
+                        data.deals.forEach(d => {
+                            const item = document.createElement("div");
+                            item.style = "padding: 6px; border-bottom: 1px solid #334155;";
+                            item.innerHTML = `<strong>${d.company_name}</strong> (${d.industry}) — <span style="color:#10b981">$${d.revenue.toLocaleString()} Rev</span> / <span style="color:#f59e0b">$${d.ebitda.toLocaleString()} EBITDA</span> | Stage: <em>${d.status}</em><br><small style="color:#94a3b8">Next: ${d.next_action || 'None'}</small>`;
+                            list.appendChild(item);
+                        });
+                    }
+                }
+            } catch (e) {
+                stats.innerText = `Error: ${e.message}`;
+            }
+        };
+        btnRefreshPipeline.addEventListener("click", loadPipeline);
+        setTimeout(loadPipeline, 1000);
+    }
+
+    const btnWeakestDeal = document.getElementById("btn-weakest-deal");
+    if (btnWeakestDeal) {
+        btnWeakestDeal.addEventListener("click", async () => {
+            try {
+                const res = await fetch("/api/v1/qla/deals/weakest");
+                if (res.ok) {
+                    const data = await res.json();
+                    if (!data.weakest_deal) {
+                        alert("No active deals found to evaluate.");
+                    } else {
+                        const d = data.weakest_deal;
+                        alert(`WEAKEST DEAL IDENTIFIED:\n${d.company_name} (${d.industry})\nFlaw Score: ${d.flaw_score}\nIssues:\n• ` + d.reasons.join("\n• "));
+                    }
+                }
+            } catch (e) {
+                alert(`Error: ${e.message}`);
+            }
+        });
+    }
+
+    const btnCheckDreamTeam = document.getElementById("btn-check-dream-team");
+    if (btnCheckDreamTeam) {
+        btnCheckDreamTeam.addEventListener("click", async () => {
+            const statusDiv = document.getElementById("qla-dream-team-status");
+            statusDiv.innerText = "Auditing Dream Team readiness...";
+            try {
+                const res = await fetch("/api/v1/qla/dream-team");
+                if (res.ok) {
+                    const data = await res.json();
+                    const r = data.readiness;
+                    let text = `Readiness Score: ${r.readiness_score_pct}%\nVerdict: ${r.verdict}\nMissing Mandatory Roles: ${r.missing_mandatory_roles.join(", ") || "None!"}`;
+                    statusDiv.innerText = text;
+                }
+            } catch (e) {
+                statusDiv.innerText = `Error: ${e.message}`;
+            }
+        });
+    }
+
+    const btnCalcLBO = document.getElementById("btn-calc-lbo");
+    if (btnCalcLBO) {
+        btnCalcLBO.addEventListener("click", async () => {
+            const price = parseFloat(document.getElementById("calc-price").value) || 0;
+            const ebitda = parseFloat(document.getElementById("calc-ebitda").value) || 0;
+            const out = document.getElementById("qla-lbo-output");
+            out.innerText = "Modeling LBO capital structure...";
+            try {
+                const res = await fetch("/api/v1/qla/analyze", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ mode: "lbo_model", purchase_price: price, ebitda: ebitda, seller_note_pct: 0.25 })
+                });
+                if (res.ok) {
+                    const json = await res.json();
+                    const d = json.results;
+                    out.innerText = `Valuation Multiple: ${d.implied_valuation_multiple}x EBITDA\n` +
+                        `Senior Commercial Debt: $${d.senior_debt.toLocaleString()} (${d.senior_debt_pct}%)\n` +
+                        `Seller Financing Note: $${d.seller_note.toLocaleString()} (${d.seller_note_pct}%)\n` +
+                        `Equity / OPM Gap: $${d.equity_opm_required.toLocaleString()} (${d.equity_pct}%)\n` +
+                        `Base DSCR: ${d.base_dscr}x [${d.dscr_verdict}]\n` +
+                        `Stress Test (-20% EBITDA): ${d.downside_stress_tests.ebitda_down_20pct.stressed_dscr}x (${d.downside_stress_tests.ebitda_down_20pct.solvency_verdict})`;
+                }
+            } catch (e) {
+                out.innerText = `Calculation error: ${e.message}`;
+            }
+        });
+    }
+
+    const btnRunBogusAudit = document.getElementById("btn-run-bogus-audit");
+    if (btnRunBogusAudit) {
+        btnRunBogusAudit.addEventListener("click", async () => {
+            const out = document.getElementById("qla-bogus-output");
+            out.innerText = "Auditing financial verification flags...";
+            try {
+                const res = await fetch("/api/v1/qla/analyze", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        mode: "bogus_books_audit",
+                        revenue: 4000000,
+                        has_tax_returns: false,
+                        largest_customer_pct: 35.0,
+                        top_3_customers_pct: 65.0,
+                        owner_actively_runs_daily_ops: true,
+                        years_of_financial_records: 2
+                    })
+                });
+                if (res.ok) {
+                    const json = await res.json();
+                    const r = json.results;
+                    out.innerHTML = `<strong style="color:${r.risk_rating === 'CRITICAL RISK' ? '#ef4444' : '#10b981'}">Score: ${r.bogus_books_risk_score}/100 [${r.risk_rating}]</strong><br>` +
+                        `<strong>Recommendation:</strong> ${r.recommendation}<br>` +
+                        `<strong>Red Flags:</strong><br>• ${r.red_flags.join('<br>• ') || 'None'}`;
+                }
+            } catch (e) {
+                out.innerText = `Audit error: ${e.message}`;
+            }
+        });
+    }
+
+    // Directives buttons (trigger chat with pre-filled directive)
+    document.querySelectorAll(".btn-directive").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const prompt = btn.getAttribute("data-prompt");
+            const chatNav = document.querySelector(".nav-item[data-tab='chat']");
+            if (chatNav) chatNav.click();
+            const input = document.getElementById("chat-input");
+            if (input) {
+                input.value = prompt;
+                const sendBtn = document.getElementById("btn-send");
+                if (sendBtn) sendBtn.click();
+            }
+        });
+    });
+
     // Initial load
     loadMemories();
 });

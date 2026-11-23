@@ -16,6 +16,9 @@ class MemoryCategory(str, Enum):
     PROJECTS = "projects"                     # Active project states, requirements
     FEEDBACK = "feedback"                     # User corrections, reviews, ratings
     TEMPORARY = "temporary"                   # Ephemeral conversation state with TTL
+    DEALS = "deals"                           # Acquisition pipeline, targets, diligence
+    DREAM_TEAM = "dream_team"                 # Board, advisers, candidate profiles, relationships
+    TRANSACTIONS = "transactions"             # Valuations, lender interactions, closings
 
 
 @dataclass
